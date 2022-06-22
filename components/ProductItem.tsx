@@ -1,15 +1,26 @@
+import { memo } from "react";
+
 interface ProductItemProps {
   product: {
     id: number;
     price: number;
     title: string;
   };
+  onAddToWishList: (id: number) => void;
 }
 
-export function ProductItem({ product }: ProductItemProps) {
-    return (
-        <div key={product.id}>
-            {product.title} - <strong>{product.price}</strong>
-        </div>
-    )
+function ProductItemComponent({ product, onAddToWishList }: ProductItemProps) {
+  return (
+    <div key={product.id}>
+      {product.title} - <strong>{product.price}</strong>
+      <button onClick={() => onAddToWishList(product.id)}>Add</button>
+    </div>
+  );
 }
+
+export const ProductItem = memo(
+  ProductItemComponent,
+  (prevProps, nextProps) => {
+    return Object.is(prevProps.product, nextProps.product);
+  }
+);
